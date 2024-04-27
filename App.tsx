@@ -1,20 +1,33 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Button, SafeAreaView, StyleSheet, View } from "react-native";
 
-export default function App() {
+import NasaClient from "./utils/NasaAPIClient";
+import { useState } from "react";
+import { NearEarthObject } from "./utils/NasaAPIClient/types";
+import NeoList from "./components/NeoList";
+
+const App = () => {
+  const [neos, setNeos] = useState<NearEarthObject[]>();
+  const date = "2024-04-27";
+
+  const handleFetchNeos = async () => {
+    const neoResp = await NasaClient.listNEOs(date, date);
+    setNeos(neoResp.data.nearEarthObjects[date]);
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Button title="Fetch NEOs" onPress={handleFetchNeos} />
+
+      {neos && <NeoList data={neos} />}
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
   },
 });
+
+export default App;
