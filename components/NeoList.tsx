@@ -1,5 +1,6 @@
-import { Text, FlatList } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import { NearEarthObject } from "../utils/NasaAPIClient/types";
+import NeoCard from "./NeoCard";
 
 interface NeoListProps {
   data: NearEarthObject[];
@@ -8,12 +9,18 @@ interface NeoListProps {
 const NeoList: React.FC<NeoListProps> = ({ data }) => {
   return (
     <FlatList
+      style={styles.list}
       data={data}
       renderItem={({ item }) => {
-        return <Text>{item.name}</Text>;
+        return <NeoCard item={item} />;
       }}
     />
   );
 };
 
+const styles = StyleSheet.create({
+  list: {
+    width: "100%",
+  },
+});
 export default NeoList;

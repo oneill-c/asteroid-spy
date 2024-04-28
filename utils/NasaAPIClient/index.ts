@@ -3,11 +3,10 @@ import camelcaseKeys from "camelcase-keys";
 import { Config, HttpRequest, HttpResponse, NEOData } from "./types";
 
 const apiUrl = process.env.EXPO_PUBLIC_NASA_API_URL;
-console.log("%c Line:6 🍋 apiUrl", "color:#e41a6a", apiUrl);
 const apiKey = process.env.EXPO_PUBLIC_NASA_API_KEY;
 
 export interface INasaAPIClient {
-  listNEOs(startDate: string, endDate: string): Promise<HttpResponse<NEOData>>;
+  ListNEOs(startDate: string, endDate: string): Promise<HttpResponse<NEOData>>;
   // ...other NASA endpoints
 }
 
@@ -18,7 +17,18 @@ class NasaAPIClient implements INasaAPIClient {
     Object.assign(this, config);
   }
 
-  public listNEOs = async (
+  /**
+   *
+   * @name ListNEOs
+   *
+   * Retrieve a list of Asteroids based on their closest approach date to Earth.
+   *
+   * @param startDate
+   * @param endDate
+   * @request GET:/orgs/{org}/products
+   * @returns Promise<HttpResponse<NEOData>>
+   */
+  public ListNEOs = async (
     startDate: string,
     endDate: string
   ): Promise<HttpResponse<NEOData>> => {
@@ -64,7 +74,7 @@ class NasaAPIClient implements INasaAPIClient {
   };
 
   private marshalData<T>(jsonData: any): T {
-    return camelcaseKeys(jsonData) as T;
+    return camelcaseKeys(jsonData, { deep: true }) as T;
   }
 }
 
