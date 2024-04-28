@@ -1,26 +1,40 @@
-import {
-  TouchableOpacity,
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Text,
-} from "react-native";
-import { useState } from "react";
+import { SafeAreaView, StyleSheet, View, Text } from "react-native";
+import { useState, useEffect } from "react";
 
 import NasaClient from "./utils/NasaAPIClient";
 import { NearEarthObject } from "./utils/NasaAPIClient/types";
 
 import Header from "./components/Header";
 import NeoList from "./components/NeoList";
+import DatePicker, { DateTimePickerEvent } from "./components/DatePicker";
 
 const App = () => {
   const [neos, setNeos] = useState<NearEarthObject[]>();
-  const dateSnakeCase = "2024-04-27";
-  const date = dateSnakeCase.replace(/-/g, "");
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const handleFetchNeos = async () => {
-    const neoResp = await NasaClient.ListNEOs(dateSnakeCase, dateSnakeCase);
-    setNeos(neoResp.data.nearEarthObjects[date]);
+  useEffect(() => {
+    if (selectedDate) {
+      updateNEOQuery(selectedDate);
+    }
+  }, [selectedDate]);
+
+  const formatDate = (date: Date) => {
+    const isoString = date.toISOString();
+    return isoString.slice(0, 10);
+  };
+
+  const updateNEOQuery = async (date: Date) => {
+    const formattedDate = formatDate(date);
+    const neoResp = await NasaClient.ListNEOs(formattedDate, formattedDate);
+    const camelDate = formattedDate.replace(/-/g, "");
+
+    setNeos(neoResp.data.nearEarthObjects[camelDate]);
+  };
+
+  const handleDateSelection = (event: DateTimePickerEvent, date?: Date) => {
+    if (date) {
+      setSelectedDate(date);
+    }
   };
 
   return (
@@ -32,11 +46,14 @@ const App = () => {
             <Text>Menu</Text>
           </View>
 
-          {/* This will become a date control */}
           <View style={styles.headerBottom}>
-            <TouchableOpacity style={styles.button} onPress={handleFetchNeos}>
-              <Text style={styles.buttonText}>Fetch Near-Earth Objects</Text>
-            </TouchableOpacity>
+            <View style={styles.datepickerField}>
+              <Text style={styles.datepickerLabel}>Choose Date</Text>
+              <DatePicker
+                selectedDate={selectedDate}
+                onChange={handleDateSelection}
+              />
+            </View>
           </View>
         </View>
       </Header>
@@ -61,26 +78,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 10,
   },
-  button: {
-    flexDirection: "row",
-    backgroundColor: "#007bff",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    marginLeft: 8,
-  },
   headerBottom: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    paddingTop: 60,
+    paddingTop: 40,
     paddingLeft: 10,
+  },
+  datepickerField: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
+  datepickerLabel: {
+    marginLeft: 10,
+    marginBottom: 5,
+    fontWeight: "bold",
   },
   content: {
     display: "flex",
