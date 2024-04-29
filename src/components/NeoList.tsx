@@ -13,6 +13,7 @@ const NeoList: React.FC<NeoListProps> = ({ data, count }) => {
       <Text style={styles.elementCount}>{`${count} results found`}</Text>
       <FlatList
         style={styles.list}
+        initialNumToRender={4}
         data={data}
         renderItem={({ item }) => {
           return <NeoCard item={item} />;

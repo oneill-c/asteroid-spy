@@ -1,12 +1,12 @@
 import { SafeAreaView, StyleSheet, View, Text } from "react-native";
 import { useState, useEffect } from "react";
 
-import NasaClient from "./utils/NasaAPIClient";
-import { NearEarthObject } from "./utils/NasaAPIClient/types";
+import NasaClient from "../utils/NasaAPIClient";
+import { NearEarthObject } from "../utils/NasaAPIClient/types";
 import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
-import Header from "./components/Header";
-import NeoList from "./components/NeoList";
-import ActionBar from "./components/ActionBar";
+import Header from "../components/Header";
+import NeoList from "../components/NeoList";
+import ActionBar from "../components/ActionBar";
 
 const App = () => {
   const [elementCount, setElementCount] = useState(0);

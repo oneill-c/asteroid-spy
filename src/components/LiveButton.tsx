@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  SafeAreaView,
-} from "react-native";
+import { Text, StyleSheet, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { router } from "expo-router";
 
 const LiveButton = () => {
   const [visible, setVisible] = useState(false);
@@ -19,17 +14,19 @@ const LiveButton = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const openLiveView = () => {
+    router.push("LiveView");
+  };
+
   return (
-    <SafeAreaView>
-      <TouchableOpacity style={styles.liveButton}>
-        <View style={styles.iconContainer}>
-          {visible && (
-            <Icon name="fiber-manual-record" size={15} color="#FF0000" />
-          )}
-        </View>
-        <Text style={styles.liveButtonText}>See Live</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+    <TouchableOpacity style={styles.liveButton} onPress={openLiveView}>
+      <View style={styles.iconContainer}>
+        {visible && (
+          <Icon name="fiber-manual-record" size={15} color="#FF0000" />
+        )}
+      </View>
+      <Text style={styles.liveButtonText}>See Live</Text>
+    </TouchableOpacity>
   );
 };
 

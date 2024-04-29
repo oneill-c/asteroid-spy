@@ -39,13 +39,12 @@ const NeoCard: React.FC<NeoCardProps> = ({ item }) => {
         <Text style={styles.id}>#{item.id}</Text>
         {item.isPotentiallyHazardousAsteroid && (
           <View style={styles.hazardBadge}>
-            <MIcon name="warning-amber" size={15} color="#fff" />
+            <MIcon name="warning-amber" size={25} color="#fff" />
           </View>
         )}
       </View>
       <View style={styles.mainSection}>
         <View style={styles.name}>
-          <Text style={styles.nameLabel}>Name</Text>
           <Text style={styles.nameText}>{item.name}</Text>
         </View>
       </View>
@@ -108,17 +107,10 @@ const styles = StyleSheet.create({
     paddingTop: 15,
   },
   name: {
-    display: "flex",
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
     marginTop: 16,
   },
-  nameLabel: {
-    fontWeight: "bold",
-    fontSize: 24,
-  },
   nameText: {
+    fontWeight: "bold",
     fontSize: 16,
   },
   field: {

@@ -55,10 +55,10 @@ class NasaAPIClient implements INasaAPIClient {
       allParams = allParams.concat(`&${request.params.toString()}`);
     }
 
-    const apiUrl = new URL(`${this.baseUrl}${request.path}`);
-    apiUrl.search = allParams;
+    const url = new URL(`${this.baseUrl}${request.path}`);
+    url.search = allParams;
 
-    return fetch(apiUrl.toString())
+    return fetch(url.toString())
       .then(async (resp) => {
         const data = await resp.json();
         const responseData: HttpResponse<T> = {
