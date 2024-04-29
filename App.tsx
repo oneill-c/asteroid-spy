@@ -3,12 +3,13 @@ import { useState, useEffect } from "react";
 
 import NasaClient from "./utils/NasaAPIClient";
 import { NearEarthObject } from "./utils/NasaAPIClient/types";
-
+import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import Header from "./components/Header";
 import NeoList from "./components/NeoList";
-import DatePicker, { DateTimePickerEvent } from "./components/DatePicker";
+import ActionBar from "./components/ActionBar";
 
 const App = () => {
+  const [elementCount, setElementCount] = useState(0);
   const [neos, setNeos] = useState<NearEarthObject[]>();
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -26,12 +27,12 @@ const App = () => {
   const updateNEOQuery = async (date: Date) => {
     const formattedDate = formatDate(date);
     const neoResp = await NasaClient.ListNEOs(formattedDate, formattedDate);
+    setElementCount(neoResp.data.elementCount);
     const camelDate = formattedDate.replace(/-/g, "");
-
     setNeos(neoResp.data.nearEarthObjects[camelDate]);
   };
 
-  const handleDateSelection = (event: DateTimePickerEvent, date?: Date) => {
+  const handleDateSelection = (_: DateTimePickerEvent, date?: Date) => {
     if (date) {
       setSelectedDate(date);
     }
@@ -39,25 +40,16 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header>
-        <View style={styles.headerContainer}>
-          <View style={styles.headerTop}>
-            <Text>LOGO</Text>
-            <Text>Menu</Text>
-          </View>
+      <Header />
 
-          <View style={styles.headerBottom}>
-            <View style={styles.datepickerField}>
-              <Text style={styles.datepickerLabel}>Choose Date</Text>
-              <DatePicker
-                selectedDate={selectedDate}
-                onChange={handleDateSelection}
-              />
-            </View>
-          </View>
-        </View>
-      </Header>
-      <View style={styles.content}>{neos && <NeoList data={neos} />}</View>
+      <ActionBar
+        selectedDate={selectedDate}
+        handleDateSelection={handleDateSelection}
+      />
+
+      <View style={styles.content}>
+        {neos && <NeoList data={neos} count={elementCount} />}
+      </View>
     </SafeAreaView>
   );
 };
@@ -71,31 +63,9 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
   },
-  headerTop: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginHorizontal: 20,
-    marginTop: 10,
-  },
-  headerBottom: {
-    paddingTop: 40,
-    paddingLeft: 10,
-  },
-  datepickerField: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-  },
-  datepickerLabel: {
-    marginLeft: 10,
-    marginBottom: 5,
-    fontWeight: "bold",
-  },
   content: {
     display: "flex",
     flex: 0.8,
-    alignItems: "center",
     marginTop: 20,
   },
 });

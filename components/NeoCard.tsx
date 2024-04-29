@@ -1,46 +1,67 @@
 import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { NearEarthObject } from "../utils/NasaAPIClient/types";
+import MIcon from "react-native-vector-icons/MaterialIcons";
+import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 
 interface NeoCardProps {
   item: NearEarthObject;
 }
 
 const NeoCard: React.FC<NeoCardProps> = ({ item }) => {
+  const buildDiameterText = () => {
+    const {
+      estimatedDiameter: { feet },
+    } = item;
+    const min = feet.estimatedDiameterMin.toFixed(2);
+    const max = feet.estimatedDiameterMax.toFixed(2);
+    return `${min} - ${max} ft diameter`;
+  };
+
+  const buildVelocityText = () => {
+    const mph = parseFloat(
+      item.closeApproachData[0].relativeVelocity.milesPerHour
+    ).toFixed(2);
+
+    return `${mph} mph`;
+  };
+
+  const buildMissDistanceText = () => {
+    const {
+      missDistance: { miles },
+    } = item.closeApproachData[0];
+
+    return `${parseFloat(miles).toFixed(2)} miles`;
+  };
+
   return (
     <TouchableOpacity style={styles.card}>
-      <Text style={styles.id}>#{item.id}</Text>
-      <View style={styles.description}>
+      <View style={styles.topSection}>
+        <Text style={styles.id}>#{item.id}</Text>
+        {item.isPotentiallyHazardousAsteroid && (
+          <View style={styles.hazardBadge}>
+            <MIcon name="warning-amber" size={15} color="#fff" />
+          </View>
+        )}
+      </View>
+      <View style={styles.mainSection}>
+        <View style={styles.name}>
+          <Text style={styles.nameLabel}>Name</Text>
+          <Text style={styles.nameText}>{item.name}</Text>
+        </View>
+      </View>
+
+      <View style={styles.subSection}>
         <View style={styles.field}>
-          <Text style={styles.fieldTitle}>Name: </Text>
-          <Text>{item.name}</Text>
+          <MIcon name="square-foot" size={20} color="#D0D0D0" />
+          <Text style={styles.fieldText}>{buildDiameterText()}</Text>
         </View>
         <View style={styles.field}>
-          <Text style={styles.fieldTitle}>Estimated Diameter (Feet): </Text>
-          <Text>{`${item.estimatedDiameter.feet.estimatedDiameterMin.toFixed(
-            2
-          )} - ${item.estimatedDiameter.feet.estimatedDiameterMax.toFixed(
-            2
-          )}`}</Text>
+          <MIcon name="speed" size={20} color="#D0D0D0" />
+          <Text style={styles.fieldText}>{buildVelocityText()}</Text>
         </View>
         <View style={styles.field}>
-          <Text style={styles.fieldTitle}>Velocity (MPH): </Text>
-          <Text>
-            {parseFloat(
-              item.closeApproachData[0].relativeVelocity.milesPerHour
-            ).toFixed(2)}
-          </Text>
-        </View>
-        <View style={styles.field}>
-          <Text style={styles.fieldTitle}>Miss Distance (Miles): </Text>
-          <Text>
-            {parseFloat(item.closeApproachData[0].missDistance.miles).toFixed(
-              2
-            )}
-          </Text>
-        </View>
-        <View style={styles.field}>
-          <Text style={styles.fieldTitle}>Potentially Hazardous?: </Text>
-          <Text>{item.isPotentiallyHazardousAsteroid ? "Yes" : "No"}</Text>
+          <MCIcon name="target" size={20} color="#D0D0D0" />
+          <Text style={styles.fieldText}>{buildMissDistanceText()}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -48,27 +69,68 @@ const NeoCard: React.FC<NeoCardProps> = ({ item }) => {
 };
 
 const styles = StyleSheet.create({
-  id: {
-    fontWeight: "bold",
-  },
   card: {
-    borderColor: "#000",
-    borderWidth: 1,
-    borderRadius: 20,
+    backgroundColor: "#F9FAFB",
+    borderRadius: 5,
     padding: 20,
     marginBottom: 15,
-    marginHorizontal: 15,
+    width: "100%",
   },
-  description: {
-    marginTop: 20,
+  topSection: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  id: {
+    fontWeight: "bold",
+    color: "#D0D0D0",
+    marginBottom: 10,
+  },
+  hazardBadge: {
+    backgroundColor: "#EED202",
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+    borderRadius: 5,
+    padding: 5,
+    marginRight: 10,
+  },
+  hazardBadgeText: {
+    color: "#fff",
+  },
+  mainSection: {
+    borderColor: "#D0D0D0",
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+  },
+  subSection: {
+    paddingTop: 15,
+  },
+  name: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 16,
+  },
+  nameLabel: {
+    fontWeight: "bold",
+    fontSize: 24,
+  },
+  nameText: {
+    fontSize: 16,
   },
   field: {
     display: "flex",
+    alignItems: "center",
     flexDirection: "row",
-    marginBottom: 10,
+    marginTop: 10,
   },
-  fieldTitle: {
-    fontWeight: "bold",
+  fieldText: {
+    marginLeft: 5,
+    color: "#D0D0D0",
+    fontSize: 12,
   },
 });
 
