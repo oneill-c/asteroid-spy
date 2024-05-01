@@ -1,6 +1,7 @@
 # Asteroid Spy :comet:
 
 Asteroid Spy is a mobile application designed to visualize asteroids and comets using data from [NASA's Near-Earth Object (NEO) API](https://api.nasa.gov/). Built with Expo React Native, it provides users with an interactive experience to explore celestial objects that pass close to Earth.
+
 ![Screenshot 2024-04-30 at 9 10 12 PM](https://github.com/oneill-c/asteroid-spy/assets/11299155/27ad83be-6a7c-463a-b4d2-736101710191)
 
 ## Features :sparkles:
