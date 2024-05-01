@@ -1,12 +1,14 @@
-import { View, StyleSheet } from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons";
+import { View, StyleSheet, Text } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome5";
+
+// TODO: Create a theme and store icon color as primary
 
 const Header = () => {
-  // TODO: Create a theme and store icon color as primary
   return (
     <View style={styles.container}>
-      <Icon name="rocket-launch" size={50} color="#ABEBCB" />
-      <Icon name="menu" size={50} color="#ABEBCB" />
+      <Icon name="meteor" size={50} color="#ABEBCB" />
+      <Text style={styles.title}>Asteroid Spy</Text>
+      <Icon name="bars" size={50} color="#ABEBCB" />
     </View>
   );
 };
@@ -17,9 +19,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     flex: 0.125,
-    marginVertical: 5,
+    marginTop: 25,
+  },
+  title: {
+    fontWeight: "900",
+    fontSize: 30,
+    color: "#5AA37E",
+    marginLeft: 10,
   },
 });
 
