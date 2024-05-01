@@ -45,17 +45,22 @@ Follow these steps to run the Asteroid Spy app locally:
 
 ### Running the App
 
-1. Start the development server:
+1. Duplicate `.env.local.default` and name the new file `.env.local`
+   ```bash
+   cp .env.local.default .env.local
+   ```
+
+3. Start the development server:
 
    ```bash
    npx expo start
    ```
 
-2. Open the Expo Go app on your mobile device.
+4. Open the Expo Go app on your mobile device.
 
-3. Scan the QR code displayed in the terminal using the Expo Go app.
+5. Scan the QR code displayed in the terminal using the Expo Go app.
 
-4. The app should now be running on your device.
+6. The app should now be running on your device.
 
 ## Known bugs 🐛
 * iOS: When changing the date, the date will update when the date is chosen from the spinner instead of waiting for the user to click OK.
